@@ -4,6 +4,12 @@ This script is used to build "official" universal installers on macOS.
 
 NEW for 3.8.0:
 - now requires Python 3.6+ to run
+TODO:
+- use context managers
+- migrate to pathlib
+- use more of shutil ?
+- convert string '%' to f-string and/or .format()
+- migrate to argparse ?
 
 NEW for 3.7.0:
 - support Intel 64-bit-only () and 32-bit-only installer builds
