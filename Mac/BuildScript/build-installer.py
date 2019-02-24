@@ -39,6 +39,7 @@ import getopt
 import grp
 import platform
 import os
+import plistlib
 import pprint
 import pwd
 import shutil
@@ -47,10 +48,6 @@ import sys
 import textwrap
 import time
 import urllib.request
-
-# TODO: convert to new plistlib API
-from plistlib import Plist
-from plistlib import writePlist
 
 STAT_0o755 = (
     stat.S_IRUSR
@@ -75,6 +72,7 @@ STAT_0o775 = (
 
 INCLUDE_TIMESTAMP = 1
 VERBOSE = 1
+
 
 def shellQuote(value):
     """
@@ -1532,7 +1530,7 @@ def packageFromRecipe(targetDir, recipe):
 
         vers = getFullVersion()
         major, minor = getVersionMajorMinor()
-        pl = Plist(
+        pl = dict(
             CFBundleGetInfoString="Python.%s %s" % (pkgname, vers),
             CFBundleIdentifier="org.python.Python.%s" % (pkgname,),
             CFBundleName="Python.%s" % (pkgname,),
@@ -1552,14 +1550,18 @@ def packageFromRecipe(targetDir, recipe):
             IFPkgFlagRootVolumeOnly=True,
             IFPkgFlagUpdateInstalledLangauges=False,
         )
-        writePlist(pl, os.path.join(packageContents, "Info.plist"))
+        with open(os.path.join(packageContents, "Info.plist"), "wb") as fp:
+            plistlib.dump(pl, fp)
 
-        pl = Plist(
+        pl = dict(
             IFPkgDescriptionDescription=readme,
             IFPkgDescriptionTitle=recipe.get("long_name", "Python.%s" % (pkgname,)),
             IFPkgDescriptionVersion=vers,
         )
-        writePlist(pl, os.path.join(packageContents, "Resources", "Description.plist"))
+        with open(
+            os.path.join(packageContents, "Resources", "Description.plist"), "wb"
+        ) as fp:
+            plistlib.dump(pl, fp)
 
     finally:
         os.chdir(curdir)
@@ -1570,7 +1572,7 @@ def makeMpkgPlist(path):
     vers = getFullVersion()
     major, minor = getVersionMajorMinor()
 
-    pl = Plist(
+    pl = dict(
         CFBundleGetInfoString="Python %s" % (vers,),
         CFBundleIdentifier="org.python.Python",
         CFBundleName="Python",
@@ -1591,7 +1593,8 @@ def makeMpkgPlist(path):
         IFPkgFlagAuthorizationAction="RootAuthorization",
     )
 
-    writePlist(pl, path)
+    with open(path, "wb") as fp:
+        plistlib.dump(pl, fp)
 
 
 def buildInstaller():
@@ -1623,9 +1626,10 @@ def buildInstaller():
     os.mkdir(rsrcDir)
 
     makeMpkgPlist(os.path.join(pkgroot, "Info.plist"))
-    pl = Plist(IFPkgDescriptionTitle="Python", IFPkgDescriptionVersion=getVersion())
+    pl = dict(IFPkgDescriptionTitle="Python", IFPkgDescriptionVersion=getVersion())
+    with open(os.path.join(pkgroot, "Resources", "Description.plist"), "wb") as fp:
+        plistlib.dump(pl, fp)
 
-    writePlist(pl, os.path.join(pkgroot, "Resources", "Description.plist"))
     for fn in os.listdir("resources"):
         if fn == ".svn":
             continue
