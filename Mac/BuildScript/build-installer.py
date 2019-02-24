@@ -1,6 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 This script is used to build "official" universal installers on macOS.
+
+NEW for 3.8.0:
+- now requires Python 3.6+ to run
 
 NEW for 3.7.0:
 - support Intel 64-bit-only () and 32-bit-only installer builds
@@ -16,13 +19,6 @@ NEW for 3.7.0:
 TODO:
 - support SDKROOT and DEVELOPER_DIR xcrun env variables
 - test with 10.5 and 10.4 and determine support status
-
-Please ensure that this script keeps working with Python 2.5, to avoid
-bootstrap issues (/usr/bin/python is Python 2.5 on OSX 10.5).  Doc builds
-use current versions of Sphinx and require a reasonably current python3.
-Sphinx and dependencies are installed into a venv using the python3's pip
-so will fetch them from PyPI if necessary.  Since python3 is now used for
-Sphinx, build-installer.py should also be converted to use python3!
 
 For 3.7.0, when building for a 10.6 or higher deployment target,
 build-installer builds and links with its own copy of Tcl/Tk 8.6.
