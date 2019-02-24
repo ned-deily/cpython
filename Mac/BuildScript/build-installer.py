@@ -6,6 +6,7 @@ NEW for 3.8.0:
 - now requires Python 3.6+ to run
 TODO:
 - use context managers
+- replace shellQuote, runCommand, and captureCommand
 - migrate to pathlib
 - use more of shutil ?
 - convert string '%' to f-string and/or .format()
