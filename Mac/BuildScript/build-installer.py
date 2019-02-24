@@ -1394,8 +1394,8 @@ def buildPython():
     # create build_time_vars dict
     exec(data)
     vars = {}
-    for k, v in build_time_vars.items():
-        if type(v) == type(""):
+    for k, v in list(build_time_vars.items()):
+        if isinstance(v, type("")):
             for p in (include_path, lib_path):
                 v = v.replace(" " + p, "")
                 v = v.replace(p + " ", "")
