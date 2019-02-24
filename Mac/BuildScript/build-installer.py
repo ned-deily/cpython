@@ -39,12 +39,22 @@ path of /Library/Frameworks/{Tcl,Tk}.framework/Versions/Current.
 
 Usage: see USAGE variable in the script.
 """
-import platform, os, sys, getopt, textwrap, shutil, stat, time, pwd, grp
+import getopt
+import grp
+import platform
+import os
+import pprint
+import pwd
+import shutil
+import stat
+import sys
+import textwrap
+import time
+import urllib.request
 
-try:
-    import urllib2 as urllib_request
-except ImportError:
-    import urllib.request as urllib_request
+# TODO: convert to new plistlib API
+from plistlib import Plist
+from plistlib import writePlist
 
 STAT_0o755 = (
     stat.S_IRUSR
@@ -69,16 +79,6 @@ STAT_0o775 = (
 
 INCLUDE_TIMESTAMP = 1
 VERBOSE = 1
-
-from plistlib import Plist
-
-try:
-    from plistlib import writePlist
-except ImportError:
-    # We're run using python2.3
-    def writePlist(plist, path):
-        plist.write(path)
-
 
 def shellQuote(value):
     """
@@ -851,7 +851,7 @@ def downloadURL(url, fname):
     """
     Download the contents of the url into the file.
     """
-    fpIn = urllib_request.urlopen(url)
+    fpIn = urllib.request.urlopen(url)
     fpOut = open(fname, "wb")
     block = fpIn.read(10240)
     try:
@@ -1380,8 +1380,6 @@ def buildPython():
     # may not cosmetically format the same as the pprint in the Python
     # being built (and which is used to originally generate
     # _sysconfigdata.py).
-
-    import pprint
 
     if getVersionMajorMinor() >= (3, 6):
         # XXX this is extra-fragile
