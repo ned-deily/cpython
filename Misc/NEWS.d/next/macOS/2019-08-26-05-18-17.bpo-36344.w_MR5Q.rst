@@ -1,0 +1,3 @@
+Automatically run "Install Certificates" during installation if pip is
+selected for installation (the default case).  Requires a working network
+connection to download the current certifi package from PyPI.
