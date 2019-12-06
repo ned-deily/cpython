@@ -72,9 +72,9 @@ Every new component that is installed using :mod:`distutils` or a
 Distutils-based system will follow the same scheme to copy its file in the right
 places.
 
-Python currently supports seven schemes:
+Python currently supports six schemes:
 
-- *posix_prefix*: scheme for Posix platforms like Linux or Mac OS X.  This is
+- *posix_prefix*: scheme for Posix platforms like Linux or macOS.  This is
   the default scheme used when Python or a component is installed.
 - *posix_home*: scheme for Posix platforms used when a *home* option is used
   upon installation.  This scheme is used when a component is installed through
@@ -84,6 +84,7 @@ Python currently supports seven schemes:
   located under the user home directory.
 - *nt*: scheme for NT platforms like Windows.
 - *nt_user*: scheme for NT platforms, when the *user* option is used.
+- *osx_framework_user*: scheme for macOS framework builds.
 
 Each scheme is itself composed of a series of paths and each path has a unique
 identifier.  Python currently uses eight paths:
@@ -188,12 +189,32 @@ Other functions
    - win-amd64 (64bit Windows on AMD64, aka x86_64, Intel64, and EM64T)
    - win32 (all others - specifically, sys.platform is returned)
 
-   Mac OS X can return:
+   macOS builds return values containing a macOS version and an architecture
+   name. The macOS version is the minimum OS level supported by this build.
+   The architecture name identifies which CPU architecture or, in the case
+   of a macOS universal build, which set of CPU architectures is supported
+   by this build. (Note that exactly which architectures or subsets of
+   architectures are usable on a particular system is dependent on the system
+   hardware and macOS version in use.  By default, macOS will launch the most
+   appropriate architecture available in a universal executable.)
 
-   - macosx-10.6-ppc
-   - macosx-10.4-ppc64
-   - macosx-10.3-i386
-   - macosx-10.4-fat
+   Possible macOS architecture names:
+
+   - x86_64
+   - i386
+   - ppc
+   - ppc64
+   - intel (x86_64, i386)
+   - fat (i386, ppc)
+   - fat3 (x86_64, i386, ppc)
+   - fat64 (x86_64, ppc64)
+   - universal (x86_64, i386, ppc, ppc64)
+
+   Examples of some possible macOS platform values returned:
+
+   - macosx-10.9-x86_64 (usable on macOS 10.9 or later in Intel64 bit mode)
+   - macosx-10.6-intel (usable on macOS 10.6 or later in Intel32 or Intel64)
+   - macosx-10.4-i386 (usable on macOS 10.4 or later if Intel32 is available)
 
    For other non-POSIX platforms, currently just returns :data:`sys.platform`.
 
