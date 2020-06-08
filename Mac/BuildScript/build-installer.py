@@ -477,6 +477,26 @@ def pkg_recipes():
             required=False,
             selected='selected',
         ),
+        dict(
+            name="PythonInstallCertificates",
+            long_name="Install or upgrade Root Certificates ",
+            readme="""\
+                This package securely downloads and installs the current
+                set of Root Certificates provided by the Certifi package
+                on PyPI (https://pypi.org/project/certifi/).  These
+                certificates provide a basic set for validating the
+                trustworthiness of SSL certificates of remote hosts
+                when establishing secure (TLS) network connections.
+                You can check for updates at any time by launching
+                the "Install Certificates.command" in
+                "/Applications/Python %(VER)s".
+                """,
+            postflight="scripts/postflight.install-certificates",
+            topdir="/Library/Frameworks/Python.framework",
+            source="/empty-dir",
+            required=False,
+            selected='selected',
+        ),
     ]
 
     return result
