@@ -13,7 +13,7 @@ umask 022
 # Run the install certifi script since we have a pip.
 # (Ignore errors for now.)
 
-"${FWK}/bin/python${PYVER}" & << "EOF"
+"${FWK}/bin/python${PYVER}" << "EOF"
 
 # install_certifi.py
 #
