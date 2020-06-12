@@ -93,6 +93,7 @@ import modulefinder
 import getopt
 import os
 import sys
+import sysconfig
 
 
 # Import the freeze-private modules
@@ -200,7 +201,7 @@ def main():
 
     # modules that are imported by the Python runtime
     implicits = []
-    for module in ('site', 'warnings', 'encodings.utf_8', 'encodings.latin_1'):
+    for module in ('site', 'warnings', 'encodings.ascii', 'encodings.utf_8', 'encodings.latin_1'):
         if module not in exclude:
             implicits.append(module)
 
@@ -235,19 +236,19 @@ def main():
         if win:
             frozendllmain_c = os.path.join(exec_prefix, 'Pc\\frozen_dllmain.c')
     else:
-        binlib = os.path.join(exec_prefix,
-                              'lib', 'python%s' % version,
-                              'config-%s' % flagged_version)
-        incldir = os.path.join(prefix, 'include', 'python%s' % flagged_version)
-        config_h_dir = os.path.join(exec_prefix, 'include',
-                                    'python%s' % flagged_version)
-        config_c_in = os.path.join(binlib, 'config.c.in')
-        frozenmain_c = os.path.join(binlib, 'frozenmain.c')
-        makefile_in = os.path.join(binlib, 'Makefile')
-        frozendllmain_c = os.path.join(binlib, 'frozen_dllmain.c')
+        binlib = sysconfig.get_config_var('LIBDIR')
+        srcdir = sysconfig.get_config_var('srcdir')
+        incldir = sysconfig.get_path('include')
+        config_h_dir = os.path.dirname(sysconfig.get_config_h_filename())
+        config_c_in = os.path.join(srcdir, 'config.c.in')
+        frozenmain_c = os.path.join(srcdir, 'frozenmain.c')
+        makefile_in = os.path.join(srcdir, 'Makefile')
+        frozendllmain_c = os.path.join(srcdir, 'frozen_dllmain.c')
     supp_sources = []
     defines = []
-    includes = ['-I' + incldir, '-I' + config_h_dir]
+    includes = ['-I' + incldir]
+    if incldir != config_h_dir:
+        includes.append('-I' + config_h_dir)
 
     # sanity check of directories and files
     check_dirs = [prefix, exec_prefix, binlib, incldir]
