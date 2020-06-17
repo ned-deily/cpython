@@ -1,0 +1,4 @@
+The macOS installers now automatically run `Install Certificates` by default
+during installation. An internet connection to PyPI is required. This action
+can be disabled by selecting the `Customize` option in the Installer's
+`Installation Type` panel.

@@ -1,6 +1,19 @@
 #!/bin/sh
+#
+# Install root certificates from the certifi package.
+#
 
-/Library/Frameworks/Python.framework/Versions/@PYVER@/bin/python@PYVER@ << "EOF"
+PYVER="@PYVER@"
+PYMAJOR="@PYMAJOR@"
+FWK="/Library/Frameworks/Python.framework/Versions/${PYVER}"
+RELFWKBIN="../../..${FWK}/bin"
+
+umask 022
+
+# Run the install certifi script since we have a pip.
+# (Ignore errors for now.)
+
+"${FWK}/bin/python${PYVER}" << "EOF"
 
 # install_certifi.py
 #
@@ -46,3 +59,11 @@ def main():
 if __name__ == '__main__':
     main()
 EOF
+
+chgrp -R admin "${FWK}/lib/python${PYVER}/site-packages/"certifi || true
+chmod -R g+w "${FWK}/lib/python${PYVER}/site-packages/"certifi || true
+
+chgrp -R admin "${FWK}/lib/python${PYVER}/site-packages/"certifi*.dist-info || true
+chmod -R g+w "${FWK}/lib/python${PYVER}/site-packages/"certifi*.dist-info || true
+
+exit 0
