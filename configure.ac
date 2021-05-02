@@ -217,9 +217,10 @@ then
 fi
 
 AC_SUBST(LIPO_32BIT_FLAGS)
+AC_SUBST(LIPO_INTEL64_FLAGS)
 AC_MSG_CHECKING(for --with-universal-archs)
 AC_ARG_WITH(universal-archs,
-    AS_HELP_STRING([--with-universal-archs=ARCH], [select architectures for universal build ("32-bit", "64-bit", "3-way", "intel", "intel-32", "intel-64", "universal2", or "all")]),
+    AS_HELP_STRING([--with-universal-archs=ARCH], [select architectures for universal build ("32-bit", "64-bit", "3-way", "intel", "intel-32", "intel-64", "universal2", "arm-64", or "all")]),
 [
 	UNIVERSAL_ARCHS="$withval"
 ],
@@ -1832,6 +1833,7 @@ yes)
             AC_MSG_RESULT($CC)
         fi
 
+        LIPO_INTEL64_FLAGS=""
         if test "${enable_universalsdk}"
         then
             case "$UNIVERSAL_ARCHS" in
@@ -1853,8 +1855,14 @@ yes)
             universal2)
                UNIVERSAL_ARCH_FLAGS="-arch arm64 -arch x86_64"
                LIPO_32BIT_FLAGS=""
+               LIPO_INTEL64_FLAGS="-extract x86_64"
                ARCH_RUN_32BIT="true"
-		;;
+               ;;
+            arm-64)
+               UNIVERSAL_ARCH_FLAGS="-arch arm64"
+               LIPO_32BIT_FLAGS=""
+               ARCH_RUN_32BIT=""
+               ;;
             intel)
                UNIVERSAL_ARCH_FLAGS="-arch i386 -arch x86_64"
                LIPO_32BIT_FLAGS="-extract i386"
