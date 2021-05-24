@@ -1391,6 +1391,12 @@ if test "$Py_LTO" = 'true' ; then
           LLVM_AR='/usr/bin/xcrun llvm-ar'
           LLVM_AR_FOUND=found
           AC_MSG_NOTICE([llvm-ar found via xcrun: ${LLVM_AR}])
+        elif test -x /usr/bin/ar
+        then
+          # use /usr/bin/ar on macOS in place of llvm-ar
+          LLVM_AR='/usr/bin/ar'
+          LLVM_AR_FOUND=found
+          AC_MSG_NOTICE([using /usr/bin/ar for llvm-ar])
         fi
       fi
       if test $LLVM_AR_FOUND = not-found

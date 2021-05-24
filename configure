@@ -7329,6 +7329,13 @@ fi
           LLVM_AR_FOUND=found
           { printf "%s\n" "$as_me:${as_lineno-$LINENO}: llvm-ar found via xcrun: ${LLVM_AR}" >&5
 printf "%s\n" "$as_me: llvm-ar found via xcrun: ${LLVM_AR}" >&6;}
+        elif test -x /usr/bin/ar
+        then
+          # use /usr/bin/ar on macOS in place of llvm-ar
+          LLVM_AR='/usr/bin/ar'
+          LLVM_AR_FOUND=found
+          { printf "%s\n" "$as_me:${as_lineno-$LINENO}: using /usr/bin/ar for llvm-ar" >&5
+printf "%s\n" "$as_me: using /usr/bin/ar for llvm-ar" >&6;}
         fi
       fi
       if test $LLVM_AR_FOUND = not-found
