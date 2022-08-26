@@ -580,17 +580,22 @@ else:
     if PLATSTDLIB_LANDMARK and not exec_prefix:
         if executable_dir:
             exec_prefix = search_up(executable_dir, PLATSTDLIB_LANDMARK, test=isdir)
-        if not exec_prefix:
+        if exec_prefix:
+            warn('*** Setting exec_prefix from executable_dir ***')
+        else:
             if EXEC_PREFIX:
                 exec_prefix = EXEC_PREFIX
                 if not isdir(joinpath(exec_prefix, PLATSTDLIB_LANDMARK)):
                     warn('Could not find platform dependent libraries <exec_prefix>')
+                else:
+                    warn('*** Setting exec_prefix from EXEC_PREFIX ***')
             else:
                 warn('Could not find platform dependent libraries <exec_prefix>')
 
     # Fallback: assume exec_prefix == prefix
     if not exec_prefix:
         exec_prefix = prefix
+        warn('*** Setting exec_prefix from prefix')
 
 
     if not prefix or not exec_prefix:
