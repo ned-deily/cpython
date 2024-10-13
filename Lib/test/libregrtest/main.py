@@ -338,8 +338,8 @@ class Regrtest:
 
     def display_result(self, runtests):
         # If running the test suite for PGO then no one cares about results.
-        if runtests.pgo:
-            return
+        # if runtests.pgo:
+        #     return
 
         state = self.get_state()
         print()
@@ -510,7 +510,7 @@ class Regrtest:
 
         # For a partial run, we do not need to clutter the output.
         if (self.want_header
-            or not(self.pgo or self.quiet or self.single_test_run
+            or not(self.quiet or self.single_test_run
                    or tests or self.cmdline_args)):
             display_header(self.use_resources, self.python_cmd)
 
